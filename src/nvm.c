@@ -1,34 +1,25 @@
-#include "nvm.h"
-#include "opcodes.h"
+#include <nvm/nvm.h>
+#include <nvm/opcodes.h>
 
 
-#define gen_case(code, op) case code: \
-++ip; \
-op(); \
-break
-
-
-
-static nvm_inline void fetch(nvm_cpu* cpu){
-  
-  switch ()
-}
+#define NVM_DISPATCH(OP) op_##OP: \
+NVM_OP_##OP; \
+goto fetch;
 
 
 
-nvm_state_t nvm_stop(nvm_cpu* cpu){
-  if (!nvm_checkCpuState(cpu)) return 0;
+void nvm_start(const nvm_opcode_t* code){
+  register nvm_opcode_t* base = code;
+  // initialize opcode table and start loop
+  goto init;
 
-  cpu->state = 0;
-  return 1;
-}
+do_first_instr:
+  goto *table[*code];
 
+fetch:
+  goto *table[*(++code)];
 
-
-nvm_state_t nvm_start(nvm_cpu* cpu){
-  while (!feof(cpu->file)){
-    fetch(cpu);
-  }
-
-  return 1;
+init:
+  // start loop
+  goto do_first_instr
 }
