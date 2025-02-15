@@ -3,26 +3,28 @@
 
 
 #define NVM_DISPATCH(OP) op_##OP: \
-SERVICE_##OP; \
+_SERVICE_##OP; \
 goto fetch;
 
 #define NVM_CDDISPATCH(OP) op_##OP: \
-SERVICE_CD_##OP; \
+_SERVICE_CD_##OP; \
 goto fetch;
 
 
 
-void nvm_ramExec(const nvm_opcode_t* code){
+void _nvm_ramExec(const nvm_opcode_t* code){
   register nvm_opcode_t* base = code;
-  // initialize opcode table and start loop
+  register char* table[256];
   goto init;
+
+
+init:
+  table = {0};
+
 
 fetch:
   goto *table[*code];
 
-init:
-  // start loop
-  goto fetch;
 
 op_illegal:
   printf("NVM: illegal instruction (halting)\n");
@@ -34,14 +36,18 @@ op_illegal:
 
 
 
-void nvm_diskExec(FILE* handle){
+void _nvm_diskExec(FILE* handle){
+  register char* table[256];
   goto init;
 
-fetch:
-  goto *table[fgetc(handle)];
 
 init:
-  goto fetch;
+  table = {0};
+
+
+fetch:
+  goto *table[nvm_fgetc(handle)];
+
 
 op_illegal:
   printf("NVM: illegal instruction (halting)\n");
@@ -50,5 +56,3 @@ op_illegal:
   printf("\tRelative address: &lu\n", ftell(handle));
   return;
 }
-
-

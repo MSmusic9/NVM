@@ -1,6 +1,17 @@
 #pragma once
 
-#include "stack.h"
+#include <nvm/stack.h>
+
+
+/*
+An enum that representing current executing mode.
+
+`NVM_EXEC_TYPE_RAM` - load bytecode into RAM.
+`NVM_EXEC_TYPE_DISK` - execute from the file in the disk.
+*/
+typedef enum{
+  NVM_EXEC_TYPE_RAM, NVM_EXEC_TYPE_DISK
+} nvm_exec_type;
 
 
 
@@ -13,39 +24,14 @@ You can allocate new NVM CPU with `nvm_createCpu()` function.
 */
 typedef struct{
   /*
-  An NVM bytecode that we load from file/buffer.
-
-  Do not modify.
+  Type of executing.
   */
-  nvm_opcode_t* code;
+  nvm_exec_type type;
 
   /*
-  A pointer to bytecode's stack.
-
-  Can be created with `nvm_createStack()` function.
-
-  NULL if host program stack is used.
+  A pointer to the source (`FIlE*` or `nvm_opcode_t*`).
   */
-  nvm_stack* stack;
-
-  /*
-  Current CPU state. Can be 0 or 1 and
-  configues with `nvm_stop/nvm_start/nvm_restart` functions.
-  */
-  nvm_state_t state;
-
-  /*
-  An offset to current instruction.
-
-  Don't change it. Please.
-  */
-  nvm_size_t ip;
-
-  /*
-  CPU's code
-  */
-  nvm_opcode_t* code;
-
+  void* src;
 } nvm_cpu;
 
 
@@ -54,7 +40,8 @@ typedef struct{
 Create a new CPU object.
 
 \param file A file the CPU object will be loaded from.
+\param type An executing type (see `nvm_exec_type`).
 
-\returns A pointer to  `nvm_cpu_t`; NULL on error.
+\returns A pointer to `nvm_cpu_t`; NULL on error.
 */
-nvm_cpu* nvm_createCpu(FILE*);
+nvm_cpu* nvm_createCpu(FILE*, nvm_exec_type);

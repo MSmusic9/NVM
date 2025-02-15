@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpu.h"
+#include <nvm/cpu.h>
 
 
 
