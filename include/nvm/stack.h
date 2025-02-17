@@ -1,6 +1,11 @@
 #pragma once
 
-#include "types.h"
+#include <nvm/types.h>
+
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 
 
@@ -100,3 +105,9 @@ Exchange stack size to the specific count of bytes.
 \returns 1 on success; NULL on error.
 */
 int nvm_exchange(nvm_stack* stack, nvm_size_t new_size);
+
+
+
+#ifdef __cplusplus
+extern "C"{
+#endif

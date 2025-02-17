@@ -45,13 +45,20 @@ typedef uint64_t nvm_size64_t;
 
 
 
+/*
+An NVM typedef that equals pointer's width.
+*/
+typedef uintptr_t nvm_impl_t;
+
+
+
 #ifdef NVM_DEBUG
   #define NVM_ALLOW_ARG_CHECKS
 #endif
 
 
 #ifndef NVM_RELEASE
-  #define nvm_error(l, m) (size_t)(printf("(%d) \033[31m\033[1m%s\033[0m\n", l, m) && 0);
+  #define nvm_error(l, m) (nvm_impl_t)(printf("(%d) \033[31m\033[1m%s\033[0m\n", l, m) && 0);
 #else
   #define nvm_error(__VA_ARGS__) 0
 #endif
@@ -76,5 +83,5 @@ typedef uint64_t nvm_size64_t;
 #elif defined(__always_inline)
   #define nvm_inline __always_inline
 #else
-  #define nvm_inline inline
+  #define nvm_inline
 #endif

@@ -3,6 +3,11 @@
 #include <nvm/cpu.h>
 
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+
 
 /*
 Start bytecode evaluating or continue after `nvm_stop()`.
@@ -27,3 +32,9 @@ This is a multithread function.
 \returns 1 if success; NULL on error.
 */
 nvm_state_t nvm_stop(nvm_cpu* cpu);
+
+
+
+#ifdef __cplusplus
+}
+#endif
